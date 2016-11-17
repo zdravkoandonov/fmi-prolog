@@ -35,3 +35,8 @@ move_same([H|T], [H1|T1], [H|T], [H1|T1]) :- H \= H1.
 move_same([H|T], [H1|T1], P, S) :- H = H1, move_same([H1, H|T], T1, P, S).
 pack([], []).
 pack([H|T], [HX|TX]) :- move_same([H], T, HX, LN), pack(LN, TX).
+
+encode_packed([], []).
+encode_packed([[HHP|THP]|TP], [[HPL, HHP]|TE]) :- length([HHP|THP], HPL),
+  encode_packed(TP, TE).
+rle(L, E) :- pack(L, P), encode_packed(P, E).
