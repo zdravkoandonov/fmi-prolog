@@ -4,7 +4,7 @@ last(X, [X]).
 last(X, [_|N]) :- last(X, N).
 
 last_but_one(X, [X, _]).
-last_but_one(X, [_|N]) :- lastButOne(X, N).
+last_but_one(X, [_|N]) :- last_but_one(X, N).
 
 % element_at(X, L, I).
 element_at(X, [X|_], 1).
@@ -29,3 +29,9 @@ compress([], []).
 compress([X], [X]).
 compress([X,X|T], C) :- compress([X|T], C).
 compress([A,B|T], [A|C]) :- A \= B, compress([B|T], C).
+
+move_same([H|T], [], [H|T], []).
+move_same([H|T], [H1|T1], [H|T], [H1|T1]) :- H \= H1.
+move_same([H|T], [H1|T1], P, S) :- H = H1, move_same([H1, H|T], T1, P, S).
+pack([], []).
+pack([H|T], [HX|TX]) :- move_same([H], T, HX, LN), pack(LN, TX).
