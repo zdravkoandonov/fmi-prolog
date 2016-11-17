@@ -65,3 +65,17 @@ rle_mod_decode([[HENumber, _]|TE], D) :- HENumber = 0, rle_mod_decode(TE, D).
 rle_mod_decode([[HENumber, HEChar]|TE], [HEChar|DecodedTail]) :- HENumber >=1, N1 is HENumber - 1,  
   rle_mod_decode([[N1, HEChar]|TE], DecodedTail).
 rle_mod_decode([HE|TE], [HE|TD]) :- not(is_list(HE)), rle_mod_decode(TE, TD).
+
+
+% P13
+% encode_direct(List, EncodedList).
+encode_direct([], []).
+encode_direct([X], [X]).
+encode_direct([H|T], [H|[HEChar|TTE]]) :- encode_direct(T, [HEChar|TTE]), 
+  not(is_list(HEChar)), H \= HEChar.
+encode_direct([H|T], [H|[[HENum, HEChar]|TTE]]) :- encode_direct(T, [[HENum, HEChar]|TTE]), 
+  H \= HEChar.
+encode_direct([H|T], [[2, HEChar]|TE]) :- encode_direct(T, [HEChar|TE]),
+  not(is_list(HEChar)), H = HEChar.
+encode_direct([H|T], [[HENum1, HEChar]|TE]) :- encode_direct(T, [[HENum, HEChar]|TE]),
+  HENum1 is HENum + 1, H = HEChar.
