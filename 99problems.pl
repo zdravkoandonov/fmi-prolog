@@ -69,11 +69,13 @@ rle_mod_decode([HE|TE], [HE|TD]) :- not(is_list(HE)), rle_mod_decode(TE, TD).
 
 % P13
 % encode_direct(List, EncodedList).
+% Runs kind of slow...
+% TODO: try to optimize this
 encode_direct([], []).
 encode_direct([X], [X]).
-encode_direct([H|T], [H|[HEChar|TTE]]) :- encode_direct(T, [HEChar|TTE]), 
+encode_direct([H|T], [H, HEChar|TTE]) :- encode_direct(T, [HEChar|TTE]), 
   not(is_list(HEChar)), H \= HEChar.
-encode_direct([H|T], [H|[[HENum, HEChar]|TTE]]) :- encode_direct(T, [[HENum, HEChar]|TTE]), 
+encode_direct([H|T], [H, [HENum, HEChar]|TTE]) :- encode_direct(T, [[HENum, HEChar]|TTE]), 
   H \= HEChar.
 encode_direct([H|T], [[2, HEChar]|TE]) :- encode_direct(T, [HEChar|TE]),
   not(is_list(HEChar)), H = HEChar.
