@@ -40,3 +40,11 @@ encode_packed([], []).
 encode_packed([[HHP|THP]|TP], [[HPL, HHP]|TE]) :- length([HHP|THP], HPL),
   encode_packed(TP, TE).
 rle(L, E) :- pack(L, P), encode_packed(P, E).
+
+encode_packed_mod([], []).
+encode_packed_mod([[HHP|THP]|TP], [HHP|TE]) :- length([HHP|THP], HPL),
+  HPL = 1, encode_packed_mod(TP, TE).
+encode_packed_mod([[HHP|THP]|TP], [[HPL, HHP]|TE]) :- length([HHP|THP], HPL),
+  HPL > 1, encode_packed_mod(TP, TE).
+rle_mod(L, E) :- pack(L, P), encode_packed_mod(P, E).
+
