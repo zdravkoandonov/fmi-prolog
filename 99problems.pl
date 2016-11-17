@@ -59,10 +59,9 @@ encode_packed_mod([[HHP|THP]|TP], [[HPL, HHP]|TE]) :- length([HHP|THP], HPL),
   HPL > 1, encode_packed_mod(TP, TE).
 rle_mod(L, E) :- pack(L, P), encode_packed_mod(P, E).
 
-% P12 % might be possible to be faster
-unpack([0, _], []).
-unpack([N, X], [X|T]) :- N >= 1, N1 is N - 1, unpack([N1, X], T).
+% P12
 rle_mod_decode([], []).
-rle_mod_decode([HE|TE], Decoded) :- is_list(HE), unpack(HE, HLD), 
-  rle_mod_decode(TE, TD), append(HLD, TD, Decoded).
+rle_mod_decode([[HENumber, _]|TE], D) :- HENumber = 0, rle_mod_decode(TE, D).
+rle_mod_decode([[HENumber, HEChar]|TE], [HEChar|DecodedTail]) :- HENumber >=1, N1 is HENumber - 1,  
+  rle_mod_decode([[N1, HEChar]|TE], DecodedTail).
 rle_mod_decode([HE|TE], [HE|TD]) :- not(is_list(HE)), rle_mod_decode(TE, TD).
