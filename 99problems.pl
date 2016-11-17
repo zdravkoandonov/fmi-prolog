@@ -81,3 +81,16 @@ encode_direct([H|T], [[2, HEChar]|TE]) :- encode_direct(T, [HEChar|TE]),
   not(is_list(HEChar)), H = HEChar.
 encode_direct([H|T], [[HENum1, HEChar]|TE]) :- encode_direct(T, [[HENum, HEChar]|TE]),
   HENum1 is HENum + 1, H = HEChar.
+
+% P14
+% [a, b, c] -> [a, a, b, b, c, c]
+dupli([], []).
+dupli([H|T], [H,H|DT]) :- dupli(T, DT).
+
+% P15
+% dupli(L, N, DL).
+% [a, b, c] -> N=3 -> [a,a,a,b,b,b,c,c,c]
+dupli([], _, [], _).
+dupli([H|T], N, [H|DT], CN) :- CN > 0, CN1 is CN - 1, dupli([H|T], N, DT, CN1).
+dupli([_|T], N, DL, 0) :- dupli(T, N, DL, N).
+dupli(L, N, DL) :- dupli(L, N, DL, N).
